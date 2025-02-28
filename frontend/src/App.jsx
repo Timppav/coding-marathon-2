@@ -11,7 +11,9 @@ import NotFoundPage from './pages/NotFoundPage';
 import JobPage, { jobLoader } from './pages/JobPage';
 import AddJobPage from './pages/AddJobPage';
 import EditJobPage from './pages/EditJobPage';
-
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
+import { AuthProvider } from './provider/AuthProvider';
 const App = () => {
   // Add New Job
   const addJob = async (newJob) => {
@@ -49,6 +51,9 @@ const App = () => {
     createRoutesFromElements(
       <Route path='/' element={<MainLayout />}>
         <Route index element={<HomePage />} />
+
+        <Route path='/signup' element={<SignUpPage />} />
+        <Route path='/login' element={<LoginPage />} />
         <Route path='/jobs' element={<JobsPage />} />
         <Route path='/add-job' element={<AddJobPage addJobSubmit={addJob} />} />
         <Route
@@ -66,6 +71,10 @@ const App = () => {
     )
   );
 
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 };
 export default App;
