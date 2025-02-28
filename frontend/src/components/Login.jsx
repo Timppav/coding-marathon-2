@@ -55,10 +55,10 @@ export function Form() {
   const onSubmit = async (data) => {
 
     const response = await handleLogin(data);
-
     if (!response) {
       console.error('Error: Invalid response or token missing.');
     } else {
+      console.log(response.token);
       localStorage.setItem('jwtToken', response.token);
       login(response);
       console.log('Token saved successfully.')

@@ -2,7 +2,7 @@ import { useParams, useLoaderData, useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaMapMarker } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+const API_BASE_URL = 'https://coding-marathon-2-kqxf.onrender.com';
 const JobPage = ({ deleteJob }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -112,7 +112,10 @@ const JobPage = ({ deleteJob }) => {
 };
 
 const jobLoader = async ({ params }) => {
-  const res = await fetch(`/api/jobs/${params.id}`);
+  const res = await fetch(`${API_BASE_URL}/api/jobs/${params.id}`);
+  if (!res.ok) {
+    throw new Error(`Failed to load job: ${res.status}`);
+  }
   const data = await res.json();
   return data;
 };
