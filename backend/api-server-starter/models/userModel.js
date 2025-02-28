@@ -4,7 +4,11 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
       type: String,
       required: true,
     },
@@ -19,19 +23,19 @@ const userSchema = new Schema(
     },
     phone_number: {
       type: String,
-      required: true,
+      required: false,
     },
     gender: {
       type: String,
-      required: true,
+      required: false,
     },
     date_of_birth: {
       type: Date,
-      required: true,
+      required: false,
     },
     membership_status: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   { timestamps: true, versionKey: false  }

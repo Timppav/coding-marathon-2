@@ -8,21 +8,19 @@ const validator = require("validator")
 const registerUser = async (req, res) => {
   try {
     const {
-      name,
+      firstName,
+      lastName,
       email,
-        password,
-        phone_number,
-        gender,
-        date_of_birth,
-        membership_status
-      } = req.body;
-      
+      password,
+
+    } = req.body;
+
     // validation
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
-    
+
     if (!email || !password) {
       throw Error("All fields must be filled");
     }
@@ -40,13 +38,11 @@ const registerUser = async (req, res) => {
 
     // Create new user
     const user = new User({
-      name,
+      firstName,
+      lastName,
       email,
-        password: hashedPassword,
-        phone_number,
-        gender,
-        date_of_birth,
-        membership_status
+      password: hashedPassword,
+
     });
 
     // Save to database
@@ -75,18 +71,18 @@ const registerUser = async (req, res) => {
 // POST /login/users
 const loginUser = async (req, res) => {
   try {
-      const { email, password } = req.body;
-        if (!email || !password) {
+    const { email, password } = req.body;
+    if (!email || !password) {
       throw Error("All fields must be filled");
-      }
+    }
 
     const user = await User.findOne({ email: email });
     if (!user) {
       return res.status(400).json({ message: "User does not exist" });
-      }
-      
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
+    if (!isMatch) {
       return res.status(400).json({ message: "Invalid password" });
     }
 

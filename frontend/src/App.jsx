@@ -16,11 +16,13 @@ import SignUpPage from './pages/SignUpPage';
 import { AuthProvider } from './provider/AuthProvider';
 const App = () => {
   // Add New Job
+  const token = localStorage.getItem('jwtToken')
   const addJob = async (newJob) => {
     const res = await fetch('/api/jobs', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(newJob),
     });
@@ -31,6 +33,11 @@ const App = () => {
   const deleteJob = async (id) => {
     const res = await fetch(`/api/jobs/${id}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+
+      },
     });
     return;
   };
@@ -41,6 +48,8 @@ const App = () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+
       },
       body: JSON.stringify(job),
     });
