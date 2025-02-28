@@ -4,7 +4,6 @@ import { Form } from '../components/Login';
 const Login = () => {
   return (
     <>
-
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white w-full max-w-md p-8 rounded-lg shadow-md ">
         <h2 className="text-2xl font-bold mb-6">Log in</h2>

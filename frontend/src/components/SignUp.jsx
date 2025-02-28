@@ -130,6 +130,7 @@ export function Form() {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const onSubmit = async (data) => {
+    console.log(data)
     const response = await apiService.auth.handleRegister(data);
     if (!response) {
       setModalMessage('Registration failed. Please try again.');

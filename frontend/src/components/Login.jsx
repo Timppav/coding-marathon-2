@@ -53,6 +53,8 @@ export function Form() {
   } = useForm();
 
   const onSubmit = async (data) => {
+    console.log(data);
+    
     const response = await handleLogin(data);
     if (!response) {
       console.error('Error: Invalid response or token missing.');
