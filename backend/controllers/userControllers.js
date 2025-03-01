@@ -12,7 +12,6 @@ const registerUser = async (req, res) => {
       lastName,
       email,
       password,
-
     } = req.body;
 
     // validation
@@ -22,15 +21,14 @@ const registerUser = async (req, res) => {
     }
 
     if (!email || !password) {
-      throw Error("All fields must be filled");
+      return res.status(400).json({ message: "All fields must be filled" });
     }
     if (!validator.isEmail(email)) {
-      throw Error("Email not valid");
+      return res.status(400).json({ message: "Email not valid" });
     }
     if (!validator.isStrongPassword(password)) {
-      throw Error("Password not strong enough");
+      return res.status(400).json({ message: "Password not strong enough" });
     }
-
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -42,7 +40,6 @@ const registerUser = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-
     });
 
     // Save to database
@@ -51,17 +48,17 @@ const registerUser = async (req, res) => {
     const userWithoutPassword = user.toObject();
     delete userWithoutPassword.password;
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       data: userWithoutPassword,
       message: "User created successfully",
     });
   } catch (error) {
-    // Validation error =  missing required fields etc.
+    // Validation error = missing required fields etc.
     if (error.name === "ValidationError") {
       return res.status(400).json({ message: error.message });
     }
-    res.status(500).json({
+    return res.status(500).json({
       error: "Server error. Please try again.",
       message: error.message,
     });
@@ -73,7 +70,7 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      throw Error("All fields must be filled");
+      return res.status(400).json({ message: "All fields must be filled" });
     }
 
     const user = await User.findOne({ email: email });
@@ -90,16 +87,19 @@ const loginUser = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.SECRET, {
       expiresIn: "1h",
     });
-    delete user.password;
+
+    const userObj = user.toObject();
+    delete userObj.password;
+
     return res.status(200).json({
       message: "Login successful",
       token: token,
       userId: user.id,
       email: user.email,
-      name: user.name,
+      name: user.firstName + " " + user.lastName,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       error: "Server error. Please try again.",
       message: error.message,
     });
