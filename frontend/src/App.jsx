@@ -14,10 +14,13 @@ import EditJobPage from './pages/EditJobPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import { AuthProvider } from './provider/AuthProvider';
-
+import { useState } from 'react';
 const API_BASE_URL = 'https://coding-marathon-2-kqxf.onrender.com';
 
 const App = () => {
+  const [jobAdd, setJobAdd] = useState(false)
+  const [jobUpdate, setJobUpdate] = useState(false)
+  const [jobDelete, setJobDelete] = useState(false)
   // Add New Job
   const addJob = async (newJob) => {
     const token = localStorage.getItem('jwtToken');
@@ -34,6 +37,7 @@ const App = () => {
       if (!res.ok) {
         throw new Error(`Failed to add job: ${res.status}`);
       }
+        setJobAdd(true)
 
       return await res.json();
     } catch (error) {
@@ -57,7 +61,7 @@ const App = () => {
       if (!res.ok) {
         throw new Error(`Failed to delete job: ${res.status}`);
       }
-
+      setJobDelete(true)
       return await res.json();
     } catch (error) {
       console.error('Error deleting job:', error);
@@ -69,7 +73,9 @@ const App = () => {
   const updateJob = async (job) => {
     const token = localStorage.getItem('jwtToken');
     try {
-      const res = await fetch(`${API_BASE_URL}/api/jobs/${job._id}`, {
+      console.log(job);
+      
+      const res = await fetch(`${API_BASE_URL}/api/jobs/${job.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +87,7 @@ const App = () => {
       if (!res.ok) {
         throw new Error(`Failed to update job: ${res.status}`);
       }
-
+      setJobUpdate(true)
       return await res.json();
     } catch (error) {
       console.error('Error updating job:', error);
@@ -109,7 +115,7 @@ const App = () => {
         <Route index element={<HomePage />} />
         <Route path='/signup' element={<SignUpPage />} />
         <Route path='/login' element={<LoginPage />} />
-        <Route path='/jobs' element={<JobsPage />} />
+        <Route path='/jobs' element={<JobsPage jobAdd={jobAdd} jobUpdate={jobUpdate} jobDelete={jobDelete}/>} />
         <Route path='/add-job' element={<AddJobPage addJobSubmit={addJob} />} />
         <Route
           path='/edit-job/:id'
