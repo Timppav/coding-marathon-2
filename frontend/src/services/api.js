@@ -1,6 +1,7 @@
+const API_BASE_URL = 'https://coding-marathon-2-kqxf.onrender.com';
 export const handleLogin = async (payload) => {
   try {
-    const response = await fetch('/api/users/login', {
+    const response = await fetch(`${API_BASE_URL}/api/users/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +33,7 @@ export const handleRegister = async (data) => {
       lastName,
     };
     
-    const response = await fetch('/api/users/register', {
+    const response = await fetch(`${API_BASE_URL}/api/users/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

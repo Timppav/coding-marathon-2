@@ -7,9 +7,9 @@ const getAllJobs = async (req, res) => {
         const jobs = limit 
         ? await Job.find({}).sort({ createdAt: -1 }).limit(limit)
         : await Job.find({}).sort({ createdAt: -1 });
-        res.status(200).json(jobs);
+        return res.status(200).json(jobs);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -24,24 +24,24 @@ const getJobById = async (req, res) => {
         const job = await Job.findById(jobId);
 
         if (!job) {
-            res.status(404).json({ message: "Job not found" });
+            return res.status(404).json({ message: "Job not found" });
         }
 
-        res.status(200).json(job);
+        return res.status(200).json(job);
     } catch (error) {
-        res.status(500).json({ message: "Failed to retrieve job" });
+        return res.status(500).json({ message: "Failed to retrieve job" });
     }
 };
 
 const createJob = async (req, res) => {
     try {
         const newJob = await Job.create({ ...req.body });
-        res.status(201).json(newJob);
+        return res.status(201).json(newJob);
     } catch (error) {
         if (error.name === "ValidationError") {
-            res.status(400).json({ message: "Invalid input", error: error.message });
+            return res.status(400).json({ message: "Invalid input", error: error.message });
         } else {
-            res.status(500).json({ message: "Failed to create job", error: error.message });
+            return res.status(500).json({ message: "Failed to create job", error: error.message });
         }
     }
 };
@@ -57,13 +57,13 @@ const updateJob = async (req, res) => {
         const job = await Job.findById(jobId);
 
         if (!job) {
-            res.status(404).json({ message: "Job not found" });
+            return res.status(404).json({ message: "Job not found" });
         }
 
         if (req.body.company) {
             req.body.company = {
                 ...job.company.toObject(),
-                ...job.company
+                ...req.body.company // Fixed: was using job.company incorrectly
             };
         }
 
@@ -71,9 +71,9 @@ const updateJob = async (req, res) => {
             new: true
         });
 
-        res.status(200).json(updatedJob);
+        return res.status(200).json(updatedJob);
     } catch (error) {
-        res.status(500).json({ message: "Failed to update job" });
+        return res.status(500).json({ message: "Failed to update job" });
     }
 };
 
@@ -88,12 +88,12 @@ const deleteJob = async (req, res) => {
         const deletedJob = await Job.findOneAndDelete({ _id: jobId });
 
         if (!deletedJob) {
-            res.status(404).json({ message: "Job not found" });
+            return res.status(404).json({ message: "Job not found" });
         }
 
-        res.status(200).json({ message: "Job deleted successfully" });
+        return res.status(200).json({ message: "Job deleted successfully" });
     } catch (error) {
-        res.status(500).json({ message: "Failed to retrieve job" });
+        return res.status(500).json({ message: "Failed to delete job" }); // Fixed error message
     }
 };
 

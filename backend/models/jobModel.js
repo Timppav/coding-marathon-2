@@ -10,7 +10,7 @@ const jobSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     contactEmail: { type: String, required: true },
-    contactPhone: { type: String, required: true }
+    contactPhone: { type: String, required: false }
   }
 });
 

@@ -50,9 +50,9 @@ export function Form() {
   const onSubmit = async (data) => {
     const response = await handleRegister(data);
     if (!response) {
-      navigate('/login')
-    } else {
       return
+    } else {
+      navigate('/login')
     };
   }
 

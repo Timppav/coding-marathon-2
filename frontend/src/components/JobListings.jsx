@@ -2,18 +2,16 @@ import { useState, useEffect } from 'react';
 import JobListing from './JobListing';
 import Spinner from './Spinner';
 
-const JobListings = ({ isHome = false }) => {
+const JobListings = ({ isHome = false , jobAdd, jobUpdate, jobDelete }) => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchJobs = async () => {
-      const apiUrl = '/api/jobs';
+      const apiUrl = 'https://coding-marathon-2-kqxf.onrender.com/api/jobs';
       try {
         const res = await fetch(apiUrl);
         const data = await res.json();
-        console.log(data);
-        
         setJobs(data);
       } catch (error) {
         console.log('Error fetching data', error);
@@ -23,7 +21,7 @@ const JobListings = ({ isHome = false }) => {
     };
 
     fetchJobs();
-  }, []);
+  }, [jobAdd, jobUpdate, jobDelete]);
 
   return (
     <section className='bg-blue-50 px-4 py-10'>

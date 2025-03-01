@@ -36,7 +36,8 @@ const EditJobPage = ({ updateJobSubmit }) => {
         contactPhone,
       },
     };
-
+    console.log(updatedJob);
+    
     updateJobSubmit(updatedJob);
 
     toast.success('Job Updated Successfully');
